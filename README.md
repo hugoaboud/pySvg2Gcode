@@ -5,6 +5,11 @@ This library takes an svg file `location/my_file.svg` and outputs the gcode conv
 
 The file `config.py` contains the configurations for the conversion (printer bed size etc).
 
+## Forked information
+The original has an error with svg files from inkscape.
+export to plain svg from inkscape then convert the file using this python module. 
+I don't know how it works, but it seems to work.
+
 ## Installation
 Simply clone this repo.
 ```
@@ -24,14 +29,6 @@ import generate_gcode from py-scvg2gcode
 ### As a Python Command
 ```
 python svg2gcode.py
-```
-
-### With Bash Script (Recommended)
-You can also use the `RUNME` script to convert files.
-
-This method is useful for debugging as it gives you extra information.
-```
-./RUNME my_svg_file.svg
 ```
 
 ## Details
