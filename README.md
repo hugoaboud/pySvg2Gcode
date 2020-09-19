@@ -5,10 +5,15 @@ This library takes an svg file `location/my_file.svg` and outputs the gcode conv
 
 The file `config.py` contains the configurations for the conversion (printer bed size etc).
 
-## Forked information
+## Fork information
 The original has an error with svg files from inkscape.
+
 export to plain svg from inkscape then convert the file using this python module. 
+
 I don't know how it works, but it seems to work.
+
+You might take a look at https://www.youtube.com/watch?v=Dwqlf5iirbM for using it for laser cutting
+
 
 ## Installation
 Simply clone this repo.
