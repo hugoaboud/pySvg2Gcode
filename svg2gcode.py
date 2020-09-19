@@ -76,8 +76,8 @@ def generate_gcode(filename):
     #          X AXIS IS SHORT AXIS
     # i.e. laser cutter is in "portrait"
     
-    width = str(width).replace("mm","")
-    height = str(height).replace("mm","")
+    width = ''.join(e for e in width if str(e).isdigit())
+    height = ''.join(e for e in height if str(e).isdigit())
     scale_x = bed_max_x / float(width)
     scale_y = bed_max_y / float(height)
     scale = min(scale_x, scale_y)
