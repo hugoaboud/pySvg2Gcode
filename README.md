@@ -6,9 +6,10 @@ This library takes an svg file `location/my_file.svg` and outputs the gcode conv
 The file `config.py` contains the configurations for the conversion (printer bed size etc).
 
 ## Fork information
-The original has an error with svg files from inkscape.
+The original has an error with svg files from inkscape, that is solved in this fork.
 
-export to plain svg from inkscape then convert the file using this python module. 
+From inkscape: export to plain svg, then convert the file using this python module. 
+Make sure that you have converted all objects to paths :-)
 
 I don't know how it works, but it seems to work.
 
