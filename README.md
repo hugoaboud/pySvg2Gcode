@@ -6,14 +6,10 @@ This library takes an svg file `location/my_file.svg` and outputs the gcode conv
 The file `config.py` contains the configurations for the conversion (printer bed size etc).
 
 ## Fork information
-The original has an error with svg files from inkscape, that is solved in this fork.
-
-From inkscape: export to plain svg, then convert the file using this python module. 
-Make sure that you have converted all objects to paths :-)
-
-I don't know how it works, but it seems to work.
-
-You might take a look at https://www.youtube.com/watch?v=Dwqlf5iirbM for using it for laser cutting
+- The original has an error with svg files from inkscape, that is solved in this fork.
+- From inkscape: export to plain svg, then convert the file using this python module. Make sure that you have converted all objects to paths.
+- Take notice that the script does not produce a strategy on cutting the matter. This script will not satisfy your maker needs so to say.
+- You might take a look at https://www.youtube.com/watch?v=Dwqlf5iirbM for using it for laser cutting
 
 
 ## Installation
