@@ -4,4 +4,4 @@
     Author: Peter Scriven
     '''
 
-from svg2gcode import generate_gcode, test
+from .svg2gcode import generate_gcode, test

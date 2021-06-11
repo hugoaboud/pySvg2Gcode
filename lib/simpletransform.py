@@ -21,7 +21,8 @@ barraud@math.univ-lille1.fr
 This code defines several functions to make handling of transform
 attribute easier.
 '''
-import cubicsuperpath, bezmisc 
+from .cubicsuperpath import *
+from .bezmisc  import *
 import copy, math, re
 
 def parseTransform(transf,mat=[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0]]):
@@ -117,7 +118,7 @@ def applyTransformToPath(mat,path):
 def fuseTransform(node):
     if node.get('d')==None:
         #FIXME: how do you raise errors?
-        raise AssertionError, 'can not fuse "transform" of elements that have no "d" attribute'
+        raise (AssertionError, 'can not fuse "transform" of elements that have no "d" attribute')
     t = node.get("transform")
     if t == None:
         return
@@ -136,7 +137,7 @@ def boxunion(b1,b2):
     if b1 is None:
         return b2
     elif b2 is None:
-        return b1    
+        return b1
     else:
         return((min(b1[0],b2[0]), max(b1[1],b2[1]), min(b1[2],b2[2]), max(b1[3],b2[3])))
 
@@ -222,7 +223,7 @@ def computeBBox(aList,mat=[[1,0,0],[0,1,0]]):
             d = 'M %f %f ' % (x1, cy) + \
                 'A' + rx + ',' + ry + ' 0 1 0 %f,%f' % (x2, cy) + \
                 'A' + rx + ',' + ry + ' 0 1 0 %f,%f' % (x1, cy)
- 
+
         if d is not None:
             p = cubicsuperpath.parsePath(d)
             applyTransformToPath(m,p)
@@ -233,7 +234,7 @@ def computeBBox(aList,mat=[[1,0,0],[0,1,0]]):
             path = '//*[@id="%s"]' % refid[1:]
             refnode = node.xpath(path)
             bbox=boxunion(computeBBox(refnode,m),bbox)
-            
+
         bbox=boxunion(computeBBox(node,m),bbox)
     return bbox
 

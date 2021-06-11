@@ -55,7 +55,8 @@ def rootWrapper(a,b,c,d):
         return 1.0*(-d/c),
     return ()
 
-def bezierparameterize(((bx0,by0),(bx1,by1),(bx2,by2),(bx3,by3))):
+def bezierparameterize(params):
+    ((bx0,by0),(bx1,by1),(bx2,by2),(bx3,by3)) = params
     #parametric bezier
     x0=bx0
     y0=by0
@@ -69,7 +70,8 @@ def bezierparameterize(((bx0,by0),(bx1,by1),(bx2,by2),(bx3,by3))):
     return ax,ay,bx,by,cx,cy,x0,y0
     #ax,ay,bx,by,cx,cy,x0,y0=bezierparameterize(((bx0,by0),(bx1,by1),(bx2,by2),(bx3,by3)))
 
-def linebezierintersect(((lx1,ly1),(lx2,ly2)),((bx0,by0),(bx1,by1),(bx2,by2),(bx3,by3))):
+def linebezierintersect(params):
+    ((lx1,ly1),(lx2,ly2)),((bx0,by0),(bx1,by1),(bx2,by2),(bx3,by3)) = params
     #parametric line
     dd=lx1
     cc=lx2-lx1
@@ -99,19 +101,23 @@ def linebezierintersect(((lx1,ly1),(lx2,ly2)),((bx0,by0),(bx1,by1),(bx2,by2),(bx
             retval.append(bezierpointatt(((bx0,by0),(bx1,by1),(bx2,by2),(bx3,by3)),i))
     return retval
 
-def bezierpointatt(((bx0,by0),(bx1,by1),(bx2,by2),(bx3,by3)),t):
+def bezierpointatt(params,t):
+    ((bx0,by0),(bx1,by1),(bx2,by2),(bx3,by3)) = params
     ax,ay,bx,by,cx,cy,x0,y0=bezierparameterize(((bx0,by0),(bx1,by1),(bx2,by2),(bx3,by3)))
     x=ax*(t**3)+bx*(t**2)+cx*t+x0
     y=ay*(t**3)+by*(t**2)+cy*t+y0
     return x,y
 
-def bezierslopeatt(((bx0,by0),(bx1,by1),(bx2,by2),(bx3,by3)),t):
+def bezierslopeatt(params,t):
+    ((bx0,by0),(bx1,by1),(bx2,by2),(bx3,by3)) = params
     ax,ay,bx,by,cx,cy,x0,y0=bezierparameterize(((bx0,by0),(bx1,by1),(bx2,by2),(bx3,by3)))
     dx=3*ax*(t**2)+2*bx*t+cx
     dy=3*ay*(t**2)+2*by*t+cy
     return dx,dy
 
-def beziertatslope(((bx0,by0),(bx1,by1),(bx2,by2),(bx3,by3)),(dy,dx)):
+def beziertatslope(params,dydx):
+    ((bx0,by0),(bx1,by1),(bx2,by2),(bx3,by3)) = params
+    (dy,dx) = dydx
     ax,ay,bx,by,cx,cy,x0,y0=bezierparameterize(((bx0,by0),(bx1,by1),(bx2,by2),(bx3,by3)))
     #quadratic coefficents of slope formula
     if dx:
@@ -136,16 +142,19 @@ def beziertatslope(((bx0,by0),(bx1,by1),(bx2,by2),(bx3,by3)),(dy,dx)):
             retval.append(i)
     return retval
 
-def tpoint((x1,y1),(x2,y2),t):
+def tpoint(xy1,xy2,t):
+    (x1,y1) = xy1
+    (x2,y2) = xy2
     return x1+t*(x2-x1),y1+t*(y2-y1)
-def beziersplitatt(((bx0,by0),(bx1,by1),(bx2,by2),(bx3,by3)),t):
+def beziersplitatt(params,t):
+    ((bx0,by0),(bx1,by1),(bx2,by2),(bx3,by3)) = params
     m1=tpoint((bx0,by0),(bx1,by1),t)
     m2=tpoint((bx1,by1),(bx2,by2),t)
     m3=tpoint((bx2,by2),(bx3,by3),t)
     m4=tpoint(m1,m2,t)
     m5=tpoint(m2,m3,t)
     m=tpoint(m4,m5,t)
-    
+
     return ((bx0,by0),m1,m4,m),(m,m5,m3,(bx3,by3))
 
 '''
@@ -153,9 +162,9 @@ Approximating the arc length of a bezier curve
 according to <http://www.cit.gu.edu.au/~anthony/info/graphics/bezier.curves>
 
 if:
-    L1 = |P0 P1| +|P1 P2| +|P2 P3| 
+    L1 = |P0 P1| +|P1 P2| +|P2 P3|
     L0 = |P0 P3|
-then: 
+then:
     L = 1/2*L0 + 1/2*L1
     ERR = L1-L0
 ERR approaches 0 as the number of subdivisions (m) increases
@@ -165,9 +174,11 @@ Reference:
 Jens Gravesen <gravesen@mat.dth.dk>
 "Adaptive subdivision and the length of Bezier curves"
 mat-report no. 1992-10, Mathematical Institute, The Technical
-University of Denmark. 
+University of Denmark.
 '''
-def pointdistance((x1,y1),(x2,y2)):
+def pointdistance(xy1,xy2):
+    (x1,y1) = xy1
+    (x2,y2) = xy2
     return math.sqrt(((x2 - x1) ** 2) + ((y2 - y1) ** 2))
 def Gravesen_addifclose(b, len, error = 0.001):
     box = 0
@@ -200,7 +211,7 @@ def Simpson(f, a, b, n_limit, tolerance):
     bsum = f(a + interval)
     est1 = multiplier * (endsum + (2.0 * asum) + (4.0 * bsum))
     est0 = 2.0 * est1
-    #print multiplier, endsum, interval, asum, bsum, est1, est0
+    #print (multiplier, endsum, interval, asum, bsum, est1, est0)
     while n < n_limit and abs(est1 - est0) > tolerance:
         n *= 2
         multiplier /= 2.0
@@ -211,16 +222,18 @@ def Simpson(f, a, b, n_limit, tolerance):
         for i in xrange(1, n, 2):
             bsum += f(a + (i * interval))
             est1 = multiplier * (endsum + (2.0 * asum) + (4.0 * bsum))
-    #print multiplier, endsum, interval, asum, bsum, est1, est0
+    #print (multiplier, endsum, interval, asum, bsum, est1, est0)
     return est1
 
-def bezierlengthSimpson(((bx0,by0),(bx1,by1),(bx2,by2),(bx3,by3)), tolerance = 0.001):
+def bezierlengthSimpson(params, tolerance = 0.001):
+    ((bx0,by0),(bx1,by1),(bx2,by2),(bx3,by3)) = params
     global balfax,balfbx,balfcx,balfay,balfby,balfcy
     ax,ay,bx,by,cx,cy,x0,y0=bezierparameterize(((bx0,by0),(bx1,by1),(bx2,by2),(bx3,by3)))
     balfax,balfbx,balfcx,balfay,balfby,balfcy = 3*ax,2*bx,cx,3*ay,2*by,cy
     return Simpson(balf, 0.0, 1.0, 4096, tolerance)
 
-def beziertatlength(((bx0,by0),(bx1,by1),(bx2,by2),(bx3,by3)), l = 0.5, tolerance = 0.001):
+def beziertatlength(params, l = 0.5, tolerance = 0.001):
+    ((bx0,by0),(bx1,by1),(bx2,by2),(bx3,by3)) = params
     global balfax,balfbx,balfcx,balfay,balfby,balfcy
     ax,ay,bx,by,cx,cy,x0,y0=bezierparameterize(((bx0,by0),(bx1,by1),(bx2,by2),(bx3,by3)))
     balfax,balfbx,balfcx,balfay,balfby,balfcy = 3*ax,2*bx,cx,3*ay,2*by,cy
@@ -234,7 +247,7 @@ def beziertatlength(((bx0,by0),(bx1,by1),(bx2,by2),(bx3,by3)), l = 0.5, toleranc
         if diff < 0:
             t += tdiv
         else:
-            t -= tdiv            
+            t -= tdiv
         curlen = Simpson(balf, 0.0, t, 4096, tolerance)
         diff = curlen - targetlen
     return t
@@ -244,8 +257,8 @@ bezierlength = bezierlengthSimpson
 
 if __name__ == '__main__':
 #    import timing
-    #print linebezierintersect(((,),(,)),((,),(,),(,),(,)))
-    #print linebezierintersect(((0,1),(0,-1)),((-1,0),(-.5,0),(.5,0),(1,0)))
+    #print (linebezierintersect(((,),(,)),((,),(,),(,),(,))))
+    #print (linebezierintersect(((0,1),(0,-1)),((-1,0),(-.5,0),(.5,0),(1,0))))
     tol = 0.00000001
     curves = [((0,0),(1,5),(4,5),(5,5)),
             ((0,0),(0,0),(5,0),(10,0)),
@@ -264,11 +277,11 @@ if __name__ == '__main__':
         timing.finish()
         st = timing.micro()
 
-        print g, gt
-        print s, st
+        print (g, gt)
+        print (s, st)
     '''
     for curve in curves:
-        print beziertatlength(curve,0.5)
+        print (beziertatlength(curve,0.5))
 
 
 # vim: expandtab shiftwidth=4 tabstop=8 softtabstop=4 encoding=utf-8 textwidth=99

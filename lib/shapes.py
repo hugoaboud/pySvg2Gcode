@@ -6,18 +6,18 @@ import traceback
 import xml.etree.ElementTree as ET
 
 # Internal Imports
-import simplepath
-import simpletransform 
-import cubicsuperpath
-import cspsubdiv
-from bezmisc import beziersplitatt
+from . import simplepath
+from . import simpletransform
+from . import cubicsuperpath
+from . import cspsubdiv
+from .bezmisc import beziersplitatt
 
 # Parent Class
 class svgshape(object):
-    
+
     def __init__(self, xml_node):
-        self.xml_node = xml_node 
- 
+        self.xml_node = xml_node
+
     def d_path(self):
         raise NotImplementedError
 
@@ -29,7 +29,7 @@ class svgshape(object):
         return "<path d=\"" + self.d_path() + "\"/>"
 
     def __str__(self):
-        return str(self.xml_node)        
+        return str(self.xml_node)
 
 # PATH tag
 class path(svgshape):
@@ -41,15 +41,15 @@ class path(svgshape):
             path_el = self.xml_node
             self.d = path_el.get('d')
         else:
-            self.d = None 
+            self.d = None
             logging.error("path: Unable to get the attributes for %s", self.xml_node)
 
      def d_path(self):
-        return self.d     
+        return self.d
 
 # RECT tag
 class rect(svgshape):
-  
+
     def __init__(self, xml_node):
         super(rect, self).__init__(xml_node)
 
@@ -72,7 +72,7 @@ class rect(svgshape):
         a.append( [' l ', [0, self.height]] )
         a.append( [' l ', [-self.width, 0]] )
         a.append( [' Z', []] )
-        return simplepath.formatPath(a)     
+        return simplepath.formatPath(a)
 
 # ELLIPSE tag
 class ellipse(svgshape):
@@ -102,7 +102,7 @@ class ellipse(svgshape):
 
 # CIRCLE tag
 class circle(ellipse):
-    
+
     def __init__(self, xml_node):
         super(ellipse, self).__init__(xml_node)
 
@@ -147,7 +147,7 @@ class polycommon(svgshape):
 
         if not self.xml_node == None:
             polycommon_el = self.xml_node
-            points = polycommon_el.get('points') if polycommon_el.get('points') else list() 
+            points = polycommon_el.get('points') if polycommon_el.get('points') else list()
             for pa in points.split():
                 self.points.append(pa)
         else:
@@ -183,13 +183,13 @@ def point_generator(path, mat, flatness):
 
         if len(simplepath.parsePath(path)) == 0:
                 return
-       
+
         simple_path = simplepath.parsePath(path)
         startX,startY = float(simple_path[0][1][0]), float(simple_path[0][1][1])
         yield startX, startY
 
         p = cubicsuperpath.parsePath(path)
-        
+
         if mat:
             simpletransform.applyTransformToPath(mat, p)
 
@@ -199,4 +199,4 @@ def point_generator(path, mat, flatness):
                     ctrl_pt1 = csp[0]
                     ctrl_pt2 = csp[1]
                     end_pt = csp[2]
-                    yield end_pt[0], end_pt[1],    
+                    yield end_pt[0], end_pt[1],

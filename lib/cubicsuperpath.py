@@ -19,7 +19,7 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 """
-import simplepath 
+from . import simplepath
 from math import *
 
 def matprod(mlist):
@@ -96,7 +96,7 @@ def ArcToPath(p1,params):
         applymat(mat, pts[1])
         applymat(mat, pts[2])
     return(p)
-    
+
 def CubicSuperPath(simplepath):
     csp = []
     subpath = -1
@@ -104,7 +104,7 @@ def CubicSuperPath(simplepath):
     last = []
     lastctrl = []
     for s in simplepath:
-        cmd, params = s        
+        cmd, params = s
         if cmd == 'M':
             if last:
                 csp[subpath].append([lastctrl[:],last[:],last[:]])
@@ -148,7 +148,7 @@ def CubicSuperPath(simplepath):
             lastctrl = subpathstart[:]
     #append final superpoint
     csp[subpath].append([lastctrl[:],last[:],last[:]])
-    return csp    
+    return csp
 
 def unCubicSuperPath(csp):
     a = []
