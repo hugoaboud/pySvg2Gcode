@@ -16,7 +16,7 @@ BEWARE: This is still an experimental tool and you should be very careful when u
 ## Installation
 Clone this repository.
 ```
-git clone https://github.com/hugoaboud/py-svg2gcode.git
+git clone https://github.com/hugoaboud/svg2gcode.git
 ```
 
 ## Usage
@@ -24,7 +24,7 @@ git clone https://github.com/hugoaboud/py-svg2gcode.git
 Place the `svg2code/` folder into your project root, then you can simply import and run it:
 ```python
 from svg2gcode import generate_gcode
-gcode = generate_gcode('test0.svg')
+gcode = generate_gcode('input.svg')
 print(gcode)
 ```
 
