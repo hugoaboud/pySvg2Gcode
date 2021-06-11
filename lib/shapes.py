@@ -184,9 +184,11 @@ def point_generator(path, mat, flatness):
         if len(simplepath.parsePath(path)) == 0:
                 return
 
-        simple_path = simplepath.parsePath(path)
-        startX,startY = float(simple_path[0][1][0]), float(simple_path[0][1][1])
-        yield startX, startY
+        # @hugoaboud: I don't know why this is here, it generates a 0 print move
+        # right after the travel move, which seems unecessary (with the new machine decorator). Disabled for now.
+        #simple_path = simplepath.parsePath(path)
+        #startX,startY = float(simple_path[0][1][0]), float(simple_path[0][1][1])
+        #yield startX, startY
 
         p = cubicsuperpath.parsePath(path)
 

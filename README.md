@@ -1,36 +1,68 @@
 # Python SVG to G-Code Converter
-A fast svg to gcode compiler forked from [vishpat/svg2gcode](https://github.com/vishpat/svg2gcode).
+A fast svg to gcode converter, forked from [andriesbron/svg2gcode](https://github.com/andriesbron/svg2gcode).
 
-This library takes an svg file `location/my_file.svg` and outputs the gcode conversion to a folder in the same directory `location/gcode_output/my_file.gcode`.
+This fork offers a more flexible CLI and the hability to generate other gcode flavors such as FDM 3D Printing.
 
-The file `config.py` contains the configurations for the conversion (printer bed size etc).
+BEWARE: This is still an experimental tool and you should be very careful when using the generated g-codes. Make sure to check them on a visualizer before running.
 
-## Fork information
-- The original has an error with svg files from inkscape, that is solved in this fork.
-- From inkscape: export to plain svg, then convert the file using this python module. Make sure that you have converted all objects to paths.
-- Take notice that the script does not produce a strategy on cutting the matter. This script will not satisfy your maker needs so to say.
-- You might take a look at https://www.youtube.com/watch?v=Dwqlf5iirbM for using it for laser cutting
-
+## Fork Features
+- Python 3.3+ support
+- Command Line Interface
+- Machine Classes: Router, 3D Printer
+- Default + Custom config file
+- Custom Output
+- Package encapsulation
 
 ## Installation
-Simply clone this repo.
+Clone this repository.
 ```
-git clone https://github.com/pjpscriv/py-svg2gcode.git
+git clone https://github.com/hugoaboud/py-svg2gcode.git
 ```
 
 ## Usage
-### As a Python module
-To import it into your existing python project:
+### Python Package
+Place the `svg2code/` folder into your project root, then you can simply import and run it:
 ```python
-import py-svg2gcode
+from svg2gcode import generate_gcode
+gcode = generate_gcode('test0.svg')
+print(gcode)
 ```
-or
-```python
-import generate_gcode from py-scvg2gcode
+
+### Standalone (CLI)
+
 ```
-### As a Python Command
+python -m svg2gcode [-h] [-o GCODE] [-d] [-c CONFIG] [--3d] SVG
+
+positional arguments:
+  SVG          input .svg file
+
+optional arguments:
+  -h, --help   show this help message and exit
+  -o GCODE     output .gcode file (default: gcode/*.svg)
+  -d, --debug  output debug info and save log
+  -c CONFIG    config file (overrides default.config)
+  --3d         generate G-Code for 3D printing instead of mill/laser
 ```
-python svg2gcode.py
+
+Convert `input.svg` into `gcode/input.gcode`:
+```
+python -m svg2gcode input.svg
+```
+
+3D Printing FDM mode
+```
+python -m svg2gcode input.svg --3d
+```
+
+Custom config file. The values not present on the custom file are loaded from `default.config`.
+Make sure to override all the relevant values for your machine.
+```
+python -m svg2gcode input.svg -c custom.config
+```
+
+Custom output file.
+```
+python -m svg2gcode input.svg -o custom.gcode
 ```
 
 ## Details
